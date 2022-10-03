@@ -8,12 +8,12 @@
 </head>
 <body>
     @isset($product)
-    <h1>$product->name</h1>
+    <h1>{{$product->name}}</h1>
     <div>
-        <p>Price: <b>$product->price</b></p>
-        <p>Category: <b>$product->category</b></p>
-        <p>Description: <b>$product->description</b></p>
-        <p>Stock: <b>$product->stock</b></p>
+        <p>Price: <b>{{$product->price}}</b></p>
+        <p>Category: <b>{{$product->category}}</b></p>
+        <p>Description: <b>{{$product->description}}</b></p>
+        <p>Stock: <b>{{$product->stock}}</b></p>
     </div>
 
     @endisset
@@ -21,5 +21,9 @@
     @empty($product)
         <h1>Error, el producto no existe</h1>
     @endempty
+
+    <div>
+        <p><a href="/products">Volver</a></p>
+    </div>
 </body>
 </html>

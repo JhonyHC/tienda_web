@@ -11,12 +11,12 @@
             <div class="form-holder">
                 <div class="form-content">
                     <div class="form-items">
-                        <h1>Product</h1>
+                        <h1>Edit Product</h1>
                         <p>Fill the fields.</p>
-                        <form method="POST" action="/products" class="requires-validation" novalidate>
+                        <form method="POST" action="products/{{ $product->id }}" class="requires-validation" novalidate>
                             @csrf
                             <div class="col-md-12">
-                                <input class="form-control" type="text" name="name" id="name" value="{{$name ?? ''}}" placeholder="Product Name" required>
+                                <input class="form-control" type="text" name="name" id="name" value="{{old('name') ?? $product->name}}" placeholder="Product Name" required>
                                 <!-- <div class="valid-feedback">Username field is valid!</div>
                                 <div class="invalid-feedback">Username field cannot be blank!</div> -->
                                 @error('name')
@@ -104,7 +104,6 @@
                                 <button id="submit" type="submit" class="btn btn-primary">Enviar</button>
                             </div>
                         </form>
-                        <p><a href="/products">Volver</a></p>
                     </div>
                 </div>
             </div>
