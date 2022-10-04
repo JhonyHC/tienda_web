@@ -38,7 +38,7 @@
                     <td>{{ $product->stock}}</td>
                     <td><a href="/products/{{ $product->id }}/edit">Update</a></td>
                     <td>
-                        <form action="/products/{{ $product->stock }}" method="post">
+                        <form action="/products/{{ $product->id }}" method="post">
                             @csrf
                             @method('DELETE')
                             <input type="submit" value="delete">

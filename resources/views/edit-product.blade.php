@@ -13,8 +13,9 @@
                     <div class="form-items">
                         <h1>Edit Product</h1>
                         <p>Fill the fields.</p>
-                        <form method="POST" action="products/{{ $product->id }}" class="requires-validation" novalidate>
+                        <form method="POST" action="/products/{{ $product->id }}" class="requires-validation" novalidate>
                             @csrf
+                            @method('PATCH')
                             <div class="col-md-12">
                                 <input class="form-control" type="text" name="name" id="name" value="{{old('name') ?? $product->name}}" placeholder="Product Name" required>
                                 <!-- <div class="valid-feedback">Username field is valid!</div>
@@ -24,7 +25,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-12">
-                                <input class="form-control" type="number" name="price" id="price" value="{{$price ?? ''}}" placeholder="Product Price" required>
+                                <input class="form-control" type="number" name="price" id="price" value="{{old('price') ?? $product->price}}" placeholder="Product Price" required>
                                 <!-- <div class="valid-feedback">Username field is valid!</div>
                                 <div class="invalid-feedback">Username field cannot be blank!</div> -->
                                 @error('price')
@@ -33,10 +34,10 @@
                             </div>
                             <div class="col-md-12">
                                 <select class="form-select mt-3" name="category" required>
-                                      <option selected disabled value="">Option</option>
-                                      <option value="toys">Toys</option>
-                                      <option value="material">Material</option>
-                                      <option value="clothes">Clothes</option>
+                                    <option disabled value="" @selected( {{$product->category}} == '')>Option</option>
+                                    <option value="toys" @selected({{$product->category}} == 'toys')>Toys</option>
+                                    <option value="material" @selected({{$product->category}} == 'material')>Material</option>
+                                    <option value="clothes" @selected({{$product->category}} == 'clothes')>Clothes</option>
                                 </select>
                                 @error('category')
                                     <div class="invalid-feedback">{{$message}}!</div>
@@ -46,12 +47,15 @@
                             </div>
 
                             <div class="col-md-12 mb-3">
-                               <input class="form-control" type="text" name="description" placeholder="Description">
+                               <input class="form-control" type="text" name="description" placeholder="Description" value="{{old('description') ?? $product->description}}">
                                <!-- <div class="valid-feedback">Username field is valid!</div>
                                <div class="invalid-feedback">Username field cannot be blank!</div> -->
+                               @error('description')
+                                    <div class="invalid-feedback">{{$message}}!</div>
+                                @enderror
                             </div>
                             <div class="col-md-12">
-                                <input class="form-control" type="number" name="stock" id="stock" value="{{$stock ?? ''}}" placeholder="Product Stock" required>
+                                <input class="form-control" type="number" name="stock" id="stock" value="{{old('stock') ?? $product->stock}}" placeholder="Product Stock" required>
                                 <!-- <div class="valid-feedback">Username field is valid!</div>
                                 <div class="invalid-feedback">Username field cannot be blank!</div> -->
                                 @error('stock')
@@ -104,6 +108,7 @@
                                 <button id="submit" type="submit" class="btn btn-primary">Enviar</button>
                             </div>
                         </form>
+                        <p><a href="/products">Volver</a></p>
                     </div>
                 </div>
             </div>

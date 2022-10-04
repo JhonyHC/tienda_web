@@ -88,7 +88,22 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:30|min:3',
+            'price' => 'required|numeric|min:1',
+            'category' => 'required|max:20|min:3',
+            'description' => 'max:255|min:4',
+            'stock' => 'required|integer|min:0',
+        ]);
+
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->category = $request->category;
+        $product->description = $request->description;
+        $product->stock = $request->stock;
+        $product->save();
+
+        return Redirect::route('products.index');
     }
 
     /**
@@ -99,6 +114,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return redirect('/products');
     }
 }
