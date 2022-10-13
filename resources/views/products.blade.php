@@ -17,43 +17,42 @@
         <a href="/products/create">Create Product</a>
         <br><br><br>
     </div>
-    @isset($products)
-        <table border="dashed" style="text-align: center;">
-            <thead>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Stock</th>
-                <th>Edit</th>
-                <th>Delete</th>
-            </thead>
-            <tbody>
-                @foreach($products as $product)
-                <tr>
-                    <td><a href="/products/{{ $product->id}}">{{ $product->name}}</a></td>
-                    <td>{{ $product->price}}</td>
-                    <td>{{ $product->category}}</td>
-                    <td>{{ $product->description}}</td>
-                    <td>{{ $product->stock}}</td>
-                    <td><a href="/products/{{ $product->id }}/edit">Update</a></td>
-                    <td>
-                        <form action="/products/{{ $product->id }}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            <input type="submit" value="delete">
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <ul>
-        </ul>
-    @endisset
-    
-    @empty($products)
+
+    @if (count($products) > 0)
+    <table border="dashed" style="text-align: center;">
+        <thead>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Stock</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </thead>
+        <tbody>
+            @foreach($products as $product)
+            <tr>
+                <td><a href="/products/{{ $product->id}}">{{ $product->name}}</a></td>
+                <td>{{ $product->price}}</td>
+                <td>{{ $product->category}}</td>
+                <td>{{ $product->description}}</td>
+                <td>{{ $product->stock}}</td>
+                <td><a href="/products/{{ $product->id }}/edit">Update</a></td>
+                <td>
+                    <form action="/products/{{ $product->id }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <input type="submit" value="delete">
+                    </form>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <ul>
+    </ul>
+    @else
         <p>No Products Registered</p>
-    @endempty
+    @endif
 </body>
 </html>

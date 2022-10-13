@@ -7,6 +7,11 @@
     <title>Create Product</title>
 </head>
 <body>
+    @php
+     $toys = 'toys';   
+     $material = 'material';   
+     $clothes = 'clothes';   
+    @endphp
 <div class="row">
             <div class="form-holder">
                 <div class="form-content">
@@ -34,10 +39,10 @@
                             </div>
                             <div class="col-md-12">
                                 <select class="form-select mt-3" name="category" required>
-                                    <option disabled value="" @selected( {{$product->category}} == '')>Option</option>
-                                    <option value="toys" @selected({{$product->category}} == 'toys')>Toys</option>
-                                    <option value="material" @selected({{$product->category}} == 'material')>Material</option>
-                                    <option value="clothes" @selected({{$product->category}} == 'clothes')>Clothes</option>
+                                    <option disabled value="" @selected($product->category == '')>Option</option>
+                                    <option value="toys" @selected($product->category == $toys)>Toys</option>
+                                    <option value="material" @selected($product->category == $material)>Material</option>
+                                    <option value="clothes" @selected($product->category == $clothes)>Clothes</option>
                                 </select>
                                 @error('category')
                                     <div class="invalid-feedback">{{$message}}!</div>
