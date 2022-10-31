@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 
@@ -19,6 +20,11 @@ Route::get('/', function () {
 });
 
 Route::resource('products', ProductController::class);
+Route::resource('orders', OrderController::class)->middleware('auth');
+
+Route::get('/cart', function(){
+    return view('cart');
+})->name('cart');
 
 Route::middleware([
     'auth:sanctum',

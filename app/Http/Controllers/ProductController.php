@@ -16,7 +16,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        return view('products', compact('products'));
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -26,7 +26,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('form-product');
+        return view('products.create');
     }
 
     /**
@@ -65,7 +65,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view('product',compact('product'));
+        return view('products.show',compact('product'));
     }
 
     /**
@@ -76,7 +76,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('edit-product',compact('product'));
+        return view('products.edit',compact('product'));
     }
 
     /**
@@ -115,6 +115,6 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        return redirect('/products');
+        return Redirect::route('products.index');
     }
 }
