@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//api/v1/products
+Route::group(['namespace' => 'App\Http\Controllers\Api'], function(){
+    Route::apiResource('products', ProductController::class);
+});
+/*
+El prefix sirve para agregarle algo atras de la URL de la api 
+Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api'], function(){
+    Route::apiResource('products', ProductController::class);
+}); */
