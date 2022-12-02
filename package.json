@@ -17,6 +17,7 @@
         "vite": "^3.0.0"
     },
     "dependencies": {
-        "@webcomponents/shadydom": "^1.10.0"
+        "@webcomponents/shadydom": "^1.10.0",
+        "sweetalert2": "^11.6.15"
     }
 }

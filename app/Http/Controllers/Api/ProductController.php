@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
+
 //use App\Services\ProductQuery;
 
 class ProductController extends Controller
@@ -35,16 +36,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('products.create');
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -52,7 +43,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        /* $request->validate([
             'name' => 'required|max:30|min:3',
             'price' => 'required|numeric|min:1',
             'category' => 'required|max:20|min:3',
@@ -68,7 +59,7 @@ class ProductController extends Controller
             'stock' => $request->stock,
         ]);
 
-        return Redirect::route('products.index');
+        return new OrderResource(Order::create($request->all())); */
         /* return view('products',compact('createdProduct')); */
     }
 
@@ -83,16 +74,6 @@ class ProductController extends Controller
             return new ProductResource($product);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        return view('products.edit',compact('product'));
-    }
 
     /**
      * Update the specified resource in storage.

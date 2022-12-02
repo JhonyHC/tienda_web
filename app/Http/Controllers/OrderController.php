@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -36,7 +38,16 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        /* $newOrder = new Order($request->except(['products_array','user_id']));
+            $user = User::find($request->user_id);
+            $user->orders()->save($newOrder);
+            $newOrder->refresh();
+            $productsString = $request->products_array;
+            $productsID = json_decode($productsString,true);
+            $newOrder->products()->attach($productsID);
+            ddd($productsID);
+            //$user->orders()->save($post)
+            return new OrderResource($newOrder); */
     }
 
     /**

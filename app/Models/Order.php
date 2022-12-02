@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type','shipping_address','date','status','total'];
+    protected $fillable = ['type','shipping_address','date','status','total','user_id'];
 
 
     public function user()
@@ -19,7 +19,7 @@ class Order extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class)->withPivot('quantity');
     }
 
 }

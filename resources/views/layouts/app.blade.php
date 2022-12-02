@@ -15,6 +15,11 @@
 
         <!-- Styles -->
         @livewireStyles
+        <script>
+            window.User = {
+                id: {{ optional(auth()->user())->id }},
+            }
+        </script>
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />

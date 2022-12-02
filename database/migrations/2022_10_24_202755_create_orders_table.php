@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('type');
-            $table->string('shipping_address');
-            $table->date('date');
+            $table->string('shipping_address')->nullable();
+            $table->date('date')->nullable();
             $table->string('status');
             $table->float('total');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
