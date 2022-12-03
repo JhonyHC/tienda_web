@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-admin-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Orders') }}
@@ -24,7 +24,7 @@
           </div> --}}
 				<div class="lg:ml-40 ml-10 space-x-8">
 					{{-- <button class="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">New Report</button> --}}
-					<button id="btnVaciar" class="bg-red-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Vaciar Carrito</button>
+					<button id="btnVaciar" class="bg-red-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Sepa xd</button>
 				</div>
 		</div>
 		</div>
