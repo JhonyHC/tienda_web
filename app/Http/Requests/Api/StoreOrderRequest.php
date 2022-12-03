@@ -27,7 +27,7 @@ class StoreOrderRequest extends FormRequest
         return [
             'type' => ['required','max:255', Rule::in(['tienda','envio'])],
             'shipping_address' => [Rule::requiredIf($this->type == 'envio'),'max:255'],
-            'status' => Rule::in(['0','1','2','3','4']),
+            'status' => Rule::in(['0','1','2','3','4','5']),
             'total' => ['required','numeric'],
             'user_id' => ['required','integer'],
             'products_array' => ['required'],
