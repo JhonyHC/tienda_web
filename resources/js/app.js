@@ -55,6 +55,12 @@ app.aux.deleteCart = ()=>{
         }
       })
 }
+app.aux.cerrarSesion = ()=>{
+    let btnCerrar = document.getElementsByClassName('cerrarSesion')[0]
+    btnCerrar.addEventListener('click', e=>{
+        localStorage.removeItem('cart')
+    })
+}
 app.aux.getFormData = (form) =>{
     let formData = new FormData(form)
     return Object.fromEntries(formData)
@@ -442,9 +448,12 @@ app.init = ()=>{
         console.log("Dashboard Page")
         app.dashboardPage()
     }
+
+    app.aux.cerrarSesion()
   
     console.log(pathname)
 }
+
 
 
 window.addEventListener('load', function() {

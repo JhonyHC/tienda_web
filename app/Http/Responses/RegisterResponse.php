@@ -3,9 +3,9 @@
 namespace App\Http\Responses;
 
 use Illuminate\Support\Facades\Auth;
-use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
+use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 
-class LoginResponse implements LoginResponseContract
+class RegisterResponse implements RegisterResponseContract
 {
 
     public function toResponse($request)
@@ -14,12 +14,7 @@ class LoginResponse implements LoginResponseContract
         // below is the existing response
         // replace this with your own code
         // the user can be located with Auth facade
-        $home = "";
-        if(Auth::user()->is_admin){
-            $home = config('fortify.admin');
-        }else{
-            $home = Auth::user()->email_verified_at ? config('fortify.user') : config('fortify.verify');
-        }
+        $home = Auth::user()->email_verified_at ? config('fortify.user') : config('fortify.verify');
         return $request->wantsJson()
                     ? response()->json(['two_factor' => false])
                     : redirect()->intended($home);

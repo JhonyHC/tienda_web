@@ -63,6 +63,7 @@ return [
 
     'home' => RouteServiceProvider::HOME,
     'user' => RouteServiceProvider::HOME_USER,
+    'verify' => RouteServiceProvider::HOME_VERIFY,
     'admin' => RouteServiceProvider::HOME_ADMIN,
 
     /*
@@ -136,7 +137,7 @@ return [
     'features' => [
         Features::registration(),
         Features::resetPasswords(),
-        // Features::emailVerification(),
+        Features::emailVerification(),
         Features::updateProfileInformation(),
         Features::updatePasswords(),
         Features::twoFactorAuthentication([

@@ -5,9 +5,10 @@
         </h2>
     </x-slot>
     @php
-        $toys = 'toys';   
-        $material = 'material';   
-        $clothes = 'clothes';   
+        $error = '';   
+        $toys = 'Toys';   
+        $material = 'Materials';   
+        $clothes = 'Clothes';   
     @endphp
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -33,14 +34,20 @@
                     <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">Oops!</span> {{$message}}!</p>
                     @enderror
                   </div>
-                  
                   <div class="mb-6">
                     <label for="category" class="block mb-2 text-sm font-medium text-black-700">Category</label>
                     <select id="category" name="category" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" required>
-                    <option value="" @selected($product->category == '')>Option</option>
-                    <option value="toys" @selected($product->category == $toys)>Toys</option>
-                    <option value="material" @selected($product->category == $material)>Material</option>
-                    <option value="clothes" @selected($product->category == $clothes)>Clothes</option>
+                    @if(empty($product))
+                        <option value="" @selected(old('category') == '')>Option</option>
+                        <option value="toys" @selected(old('category') == 'toys')>Toys</option>
+                        <option value="material" @selected(old('category') == 'toys')>Material</option>
+                        <option value="clothes" @selected(old('category') == 'toys')>Clothes</option>
+                    @else
+                        <option value="" @selected($product->category == $error)>Option</option>
+                        <option value="toys" @selected($product->category == $toys)>Toys</option>
+                        <option value="material" @selected($product->category == $material)>Material</option>
+                        <option value="clothes" @selected($product->category == $clothes)>Clothes</option>
+                    @endif
                     </select>
                     @error('category')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">Oops!</span> {{$message}}!</p>

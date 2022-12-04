@@ -27,8 +27,10 @@
                     @auth
                         @if(auth()->user()->is_admin)
                             <a href="{{ url('/admin/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
-                        @else
+                        @elseif(auth()->user()->email_verified_at)
                             <a href="{{ url('/user/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
+                        @else
+                            <a href="{{ url('/email/verify') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Verify Email</a>
                         @endif
                     @else
                         <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
