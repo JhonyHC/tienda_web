@@ -14,7 +14,7 @@
                         <!-- Card 1 -->
                         <div tabindex="0" class="focus:outline-none mx-2 w-72 xl:mb-0 mb-8">
                             <div>
-                                <a href="/products/{{$product->id}}">
+                                <a href="products/{{$product->id}}">
                                 <img alt="image" src="{{$product->image ? asset('storage/'. $product->image) : asset('storage/images/no-image.jpg')}}" tabindex="0" class="focus:outline-none w-full h-44" />
                                 </a>
                             </div>
@@ -32,7 +32,7 @@
                                 </div> --}}
                                 <div class="p-4">
                                     <div class="flex items-center">
-                                        <h2 tabindex="0" class="focus:outline-none text-lg font-semibold"><a href="/products/{{ $product->id}}">{{ $product->name}}</a></h2>
+                                        <h2 tabindex="0" class="focus:outline-none text-lg font-semibold"><a href="products/{{ $product->id}}">{{ $product->name}}</a></h2>
                                         {{-- <div class="bg-yellow-200 py-1.5 px-6 rounded-full">
                                             <p tabindex="0" class="focus:outline-none text-xs text-yellow-700"> {{ $product->price }}</p>
                                         </div> --}}

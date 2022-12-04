@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Product extends Model
 {
@@ -29,5 +30,12 @@ class Product extends Model
                 ->orWhere('description','like','%'. $filters['search'].'%')
                 ->orWhere('tags','like','%'. $filters['search'].'%');
         } */
+    }
+
+    protected function category(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ucfirst($value),
+        );
     }
 }
