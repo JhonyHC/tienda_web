@@ -24,4 +24,13 @@ class Order extends Model
         return $this->belongsToMany(Product::class)->withPivot('quantity');
     }
 
+    public function prunable()
+    {
+        return static::where('created_at', '<=', now()->subMonth());
+    }
+    protected function pruning()
+    {
+        //Lo que pasa cuando ya se vayan a borrar los datos
+    }
+
 }

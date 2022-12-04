@@ -26,7 +26,7 @@
           </div> --}}
 				<div class="lg:ml-40 ml-10 space-x-8">
 					{{-- <button class="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">New Report</button> --}}
-					<button id="btnAgregar" class="bg-red-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Agregar Producto</button>
+					<a href="products/create" id="btnAgregar" class="bg-green-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Agregar Producto</a>
 				</div>
 		</div>
 		</div>
@@ -64,7 +64,7 @@
                                 @foreach ($products as $product)
                                     <tr>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center space-x-3">
-                                            <div class="inline-flex w-10 h-10"> <img class='w-10 h-10 object-cover rounded-full' alt='User avatar' src='https://i.imgur.com/siKnZP2.jpg' /> </div>
+                                            <div class="inline-flex w-10 h-10"> <img class='w-10 h-10 object-cover rounded-full' alt='User avatar' src="{{$product->image ? asset('storage/'. $product->image) : asset('storage/images/no-image.jpg')}}" /> </div>
                                             <p class="text-gray-900 whitespace-no-wrap"><a href="products/{{$product->id}}">{{ $product->name}}</a></p>
                                         </td>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -91,7 +91,7 @@
                                             <x-jet-button class="btn productos"><a href="products/{{ $product->id }}/edit">Update</a></x-jet-button>
                                         </td>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                            <x-jet-button class="btn productos">
+                                            <x-jet-button class="btn productos bg-red-600">
                                                 <form action="products/{{ $product->id }}" method="post">
                                                     @csrf
                                                     @method('DELETE')

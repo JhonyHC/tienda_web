@@ -121,7 +121,9 @@ app.cartPage.printProducts = (products) =>{
     let productsWithQty = app.cartPage.joinProductQty(products)
     let contentStr = ''
     let total = 0
+    const urlFull = location.protocol + '//' + location.host;
     for(let product of productsWithQty){
+        console.log(product)
         total += product.price * product.qty;
         contentStr +=`
         <tr>
@@ -129,8 +131,8 @@ app.cartPage.printProducts = (products) =>{
                 <div class="flex items-center">
                     <div class="flex-shrink-0 w-10 h-10">
                         <img class="w-full h-full rounded-full"
-                            src="https://cdn.tuk.dev/assets/templates/classified/Bitmap (1).png"
-                            alt=""/>
+                        src="${product.image ? urlFull.concat("/storage/",product.image) : urlFull.concat("/storage/images/no-image.jpg")}"
+                            alt="image"/>
                     </div>
                         <div class="ml-3">
                             <p class="text-gray-900 whitespace-no-wrap">

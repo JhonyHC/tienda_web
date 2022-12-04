@@ -15,7 +15,7 @@
                         <div tabindex="0" class="focus:outline-none mx-2 w-72 xl:mb-0 mb-8">
                             <div>
                                 <a href="/products/{{$product->id}}">
-                                <img alt="person capturing an image" src="https://cdn.tuk.dev/assets/templates/classified/Bitmap (1).png" tabindex="0" class="focus:outline-none w-full h-44" />
+                                <img alt="image" src="{{$product->image ? asset('storage/'. $product->image) : asset('storage/images/no-image.jpg')}}" tabindex="0" class="focus:outline-none w-full h-44" />
                                 </a>
                             </div>
                             <div class="bg-white">

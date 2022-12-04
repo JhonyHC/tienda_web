@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -38,23 +39,28 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|max:30|min:3|unique:products',
-            'price' => 'required|numeric|min:1',
+        $formularioValidado = $request->validate([
+            'name' => 'required|max:50|min:3|unique:products',
+            'price' => 'required|numeric|min:1|max:9999',
             'category' => 'required|max:20|min:3',
             'description' => 'max:255|min:4',
-            'stock' => 'required|integer|min:0',
+            'stock' => 'required|integer|min:0|max:9999',
         ]);
 
-        $createdProduct = Product::create([
+        if($request->hasFile('image')){
+            $formularioValidado['image'] = $request->file('image')->store('images', 'public');
+        }
+
+        /* $createdProduct = Product::create([
             'name' => $request->name,
             'price' => $request->price,
             'category' => $request->category,
             'description' => $request->description,
             'stock' => $request->stock,
-        ]);
+        ]); */
+        Product::create($formularioValidado);
 
-        return Redirect::route('admin.products.index');
+        return Redirect::route('admin.products.index')->with('message','Producto Creado Correctamente');
         /* return view('products',compact('createdProduct')); */
     }
 
@@ -89,22 +95,29 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        $request->validate([
-            'name' => 'required|max:30|min:3',
-            'price' => 'required|numeric|min:1',
+        $formularioValidado = $request->validate([
+            'name' => 'required|max:50|min:3',
+            'price' => 'required|numeric|min:1|max:9999',
             'category' => 'required|max:20|min:3',
             'description' => 'max:255|min:4',
-            'stock' => 'required|integer|min:0',
+            'stock' => 'required|integer|min:0|max:9999',
         ]);
+        if($request->hasFile('image')){
+            $formularioValidado['image'] = $request->file('image')->store('images', 'public');
+            if($product->image != NULL){
+                Storage::delete($product->image);
+            }
+        }
 
-        $product->name = $request->name;
+        $product->update($formularioValidado);
+        /* $product->name = $request->name;
         $product->price = $request->price;
         $product->category = $request->category;
         $product->description = $request->description;
         $product->stock = $request->stock;
-        $product->save();
+        $product->save(); */
 
-        return Redirect::route('admin.products.index');
+        return back()->with('message', 'Producto Actualizado Correctamente');
     }
 
     /**
@@ -115,7 +128,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if($product->image != NULL){
+            Storage::delete($product->image);
+        }
         $product->delete();
-        return Redirect::route('admin.products.index');
+        return Redirect::route('admin.products.index')->with('message', 'Producto Eliminado Correctamente');;
     }
 }
