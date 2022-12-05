@@ -23,7 +23,10 @@ app.aux.updateCart = (cart,itemId = "", qty = 1)=>{
     if(cart[itemId] == undefined){
         cart[itemId] = 1
     }else{
-        cart[itemId] += qty
+        if(qty == 1)
+            cart[itemId] += qty
+        else
+            cart[itemId] = qty
     }
 
     localStorage.setItem('cart',JSON.stringify(cart))
@@ -175,16 +178,16 @@ app.cartPage.printProducts = (products) =>{
                     </div>
             </td>
             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                <p class="text-gray-900 whitespace-no-wrap">${product.stock}</p>
+                <p class="text-gray-900 whitespace-no-wrap" id="productStock_${product.id}">${product.stock}</p>
             </td>
             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                <p class="text-gray-900 whitespace-no-wrap">${product.price}</p>
+                <p id="productPrice_${product.id}" class="text-gray-900 whitespace-no-wrap">${product.price}</p>
             </td>
             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="${product.id}" type="number" min="1" max="${product.stock}" value=${product.qty}>
+                <input productid="${product.id}" id="productQty_${product.id}" class="inputQty shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" min="1" max="${product.stock}" value=${product.qty}>
                 
             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                <p class="text-gray-900 whitespace-no-wrap">
+                <p class="text-gray-900 whitespace-no-wrap" id="productTotal_${product.id}">
                     ${Number(product.price * product.qty).toFixed(2)}
                 </p>
             </td>
@@ -217,8 +220,77 @@ app.cartPage.getTotal = async ()=>{
     }
 }
 
+/* app.cartPage.checkStocks = () =>{
+    let cart = JSON.parse(localStorage.getItem('cart'))
+    let qty, stock, flag = false
+    for(id of Object.keys(cart)){
+        qty = document.getElementById(`productQty_${id}`).value
+        stock = document.getElementById(`productStock_${id}`).innerHTML
+        if(qty > stock){
+            flag = true
+        }else{
+            app.aux.updateCart(cart,id,qty)
+        }
+    }
+
+} */
+
+app.cartPage.updateProductTotal = (id,qty)=>{
+    let totalContainer = document.getElementById(`productTotal_${id}`)
+    let productPrice = document.getElementById(`productPrice_${id}`).innerHTML
+    let total = Number(productPrice * qty).toFixed(2)
+    totalContainer.innerHTML = total
+}
+app.cartPage.checkStocks = (id=0,qty=0,stock=0) =>{
+    let cart = JSON.parse(localStorage.getItem('cart'))
+    if(id == 0){
+        let flag = false
+        for(id of Object.keys(cart)){
+            qty = Number(document.getElementById(`productQty_${id}`).value)
+            stock = Number(document.getElementById(`productStock_${id}`).innerHTML)
+            if(qty > stock){
+                flag = true
+            }else{
+                if(qty <= 0){
+                    flag = true
+                }else{
+                    app.aux.updateCart(cart,id,qty)
+                    app.cartPage.updateProductTotal(id,qty)
+                }
+            }
+        }
+        console.log(2,flag)
+        if(flag){
+            return false;
+        }else{
+            return true
+        }
+
+    }else{
+        if(qty > stock){
+            Swal.fire(
+                'Falta de Stock',
+                'La cantidad que quieres de este producto es mayor al stock disponible.',
+                'error'
+            )
+          }else{
+            if(qty <=0){
+                Swal.fire(
+                    'Debes pedir mas cantidad',
+                    'La cantidad que quieres de este es 0 o negativa.',
+                    'error'
+            )
+            }else{
+                app.aux.updateCart(cart,id,qty)
+                app.cartPage.updateProductTotal(id,qty)
+            }
+          }
+    }
+    
+}
 app.cartPage.listenClicks = ()=>{
     let btnVaciarCarrito = document.getElementById('btnVaciar')
+    let cartTotal = document.getElementById('cartTotal')
     let formCheckout = document.getElementById('formCheckout')
     document.addEventListener("click", function(e){
         const target = e.target.closest(".deleteProduct"); // Or any other selector.
@@ -259,9 +331,34 @@ app.cartPage.listenClicks = ()=>{
 
         }
       });
+      ['focusout','mouseup'].forEach( e =>{
+          document.addEventListener(e, function(e){
+              const target = e.target.closest(".inputQty"); // Or any other selector.
+              if(target){
+                  let id = target.getAttribute('productid')
+                  let qty = Number(target.value)
+                  let stock = Number(document.getElementById(`productStock_${id}`).innerHTML)
+                  app.cartPage.checkStocks(id,qty,stock)
+                  
+              }
+            },false);
+      })
+
 
     btnVaciarCarrito.addEventListener("click", function(e){
         app.aux.deleteCart()
+        /* const target = e.target.closest(".deleteProduct"); // Or any other selector.
+        if(target){
+            console.log(target)
+            //Preguntar antes
+            target.parentNode.parentNode.remove()
+            app.aux.deleteProduct(target.id)
+            app.cartPage.updateCartTotal()
+
+        } */
+      });
+    cartTotal.addEventListener("click", function(e){
+        app.cartPage.updateCartTotal()
         /* const target = e.target.closest(".deleteProduct"); // Or any other selector.
         if(target){
             console.log(target)
@@ -283,7 +380,27 @@ app.cartPage.listenClicks = ()=>{
               })
               return
         }
-        let formData = app.aux.getFormData(e.target)
+        let result = await Swal.fire({
+            title: 'Orden Lista?',
+            text: "Tu orden está a punto de crearse con los productos que tienes en el carrito",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#24ec8e',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Crear Orden'
+          })
+          if(result.isConfirmed){
+            let resultado = app.cartPage.checkStocks()
+            if(resultado == false){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Cantidades erroneas',
+                    text: 'Tus productos exceden el stock o tienen datos equivocados, por favor revisalos antes de ordenar'
+                  })
+                return
+            }
+            
+            let formData = app.aux.getFormData(e.target)
         formData.user_id = window.User.id
         formData.status = 0
         formData.total = await app.cartPage.getTotal()
@@ -317,6 +434,7 @@ app.cartPage.listenClicks = ()=>{
                 text: 'Hubo un error al crear tu pedido'
               })
         }
+          }
             
       })
 

@@ -41,7 +41,7 @@
                                     <p tabindex="0" class="focus:outline-none text-xs text-gray-600 mt-2">{{ $product->description }}</p>
                                     <div class="flex mt-4">
                                         <div>
-                                            <p tabindex="0" class="focus:outline-none text-xs text-gray-600 px-2 bg-gray-200 py-1">{{ ucfirst($product->category) }}</p>
+                                            <p tabindex="0" class="focus:outline-none text-xs text-gray-600 px-2 bg-gray-200 py-1">{{ $product->category }}</p>
                                         </div>
                                         <div class="pl-2">
                                             <p tabindex="0" class="focus:outline-none text-xs text-gray-600 px-2 bg-gray-200 py-1">Stock {{ $product->stock }}</p>
