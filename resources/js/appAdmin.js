@@ -1,6 +1,10 @@
 import './bootstrap';
 
+import 'flowbite'
+import 'flowbite/dist/datepicker'
 import Swal from 'sweetalert2'
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 Alpine.start();

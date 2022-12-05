@@ -42,6 +42,8 @@
             </main>
         </div>
 
+        <x-flash-message/>
+        
         @stack('modals')
 
         @livewireScripts

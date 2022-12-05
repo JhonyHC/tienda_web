@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
 class OrderController extends Controller
 {
@@ -18,9 +19,14 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with('products')->orderBy('created_at')->get();
+        $orders = Order::with('products')->whereNot(function ($query){
+            $query->where('status', 6);
+        })->orderBy('created_at','desc')->get();
+        $deletedOrders = Order::onlyTrashed()->with('products')->orderBy('deleted_at')->get();
+        $archivedOrders = Order::with('products')->where('status',6)->orderBy('created_at','desc')->get();
         
-        return view('admin.orders.index', compact('orders'));
+        return view('admin.orders.index', compact('orders','deletedOrders','archivedOrders'));
+        
     }
 
     /**
@@ -72,7 +78,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        //
+        return view('admin.orders.edit',compact('order'));
     }
 
     /**
@@ -84,7 +90,31 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $request->validate([
+            'type' => ['required','max:255', Rule::in(['tienda','envio'])],
+            'shipping_address' => [Rule::requiredIf($request->type == 'envio'),'max:255'],
+            'status' => Rule::in(['0','1','2','3','4','5']),
+            'date' => ['nullable','date'],
+        ]);
+
+        $order->type = $request->type;
+        $order->shipping_address = $request->shipping_address;
+        $order->status = $request->status;
+        $order->date = $request->date;
+        $order->save();
+        $order->refresh();
+
+        return back()->with('message', 'Orden Actualizada Correctamente');
+    }
+
+    public function recuperarOrden(Order $order)
+    {
+        if($order->trashed()){
+            $order->status = 0;
+            $order->save();
+            $order->restore();
+        }
+        return back()->with('message', 'Orden Recuperada');
     }
 
     /**
@@ -95,6 +125,32 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        if($order->trashed()){
+            $order->forceDelete();
+            return back()->with('message', 'Orden Eliminada Permanentemente');
+        }else{
+            $order->status = 5;
+            $order->save();
+            $order->delete();
+            return back()->with('message', 'Orden Cancelada');
+        }
+    }
+
+    public function eliminarPermanente(Order $order)
+    {
+        if($order->trashed()){
+            $order->forceDelete();
+            return back()->with('message', 'Orden Eliminada Permanentemente');
+        }else{
+            if($order->status == 6){
+                $order->forceDelete();
+                return back()->with('message', 'Orden Eliminada Permanentemente');
+            }else{
+                $order->status = 4;
+                $order->save();
+                $order->delete();
+                return back()->with('message', 'Orden Cancelada');
+            }
+        }
     }
 }

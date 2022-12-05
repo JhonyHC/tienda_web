@@ -18,9 +18,13 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with('products')->where('user_id', Auth::id())->orderBy('created_at')->get();
+        $orders = Order::with('products')->where('user_id', Auth::id())->whereNot(function ($query){
+            $query->where('status', 6);
+        })->orderBy('created_at','desc')->get();
+        $deletedOrders = Order::onlyTrashed()->with('products')->where('user_id', Auth::id())->orderBy('deleted_at')->get();
+        $archivedOrders = Order::with('products')->where('status',6)->where('user_id', Auth::id())->orderBy('created_at','desc')->get();
         
-        return view('user.orders.index', compact('orders'));
+        return view('user.orders.index', compact('orders','deletedOrders','archivedOrders'));
     }
 
     /**
@@ -84,7 +88,38 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        if($order->trashed()){
+            $order->status = 0;
+            $order->save();
+            $order->restore();
+        }
+        return back()->with('message', 'Orden Recuperada');
+    }
+
+    public function recuperarOrden(Order $order)
+    {
+        if($order->trashed()){
+            if($order->status == 5){
+                return back()->with('message', 'No puedes recuperar una order cancelada por un administrador');
+            }else{
+                $order->status = 0;
+                $order->save();
+                $order->restore();
+            }
+        }
+        return back()->with('message', 'Orden Recuperada');
+    }
+    public function archivarOrden(Order $order)
+    {
+        if($order->trashed()){
+            $order->status = 6;
+            $order->save();
+            $order->restore();
+        }else{
+            $order->status = 6;
+            $order->save();
+        }
+        return back()->with('message', 'Orden Archivada');
     }
 
     /**
@@ -95,6 +130,31 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        if($order->trashed()){
+            $order->forceDelete();
+            return back()->with('message', 'Orden Eliminada Permanentemente');
+        }else{
+            $order->status = 4;
+            $order->save();
+            $order->delete();
+            return back()->with('message', 'Orden Cancelada');
+        }
+    }
+    public function eliminarPermanente(Order $order)
+    {
+        if($order->trashed()){
+            $order->forceDelete();
+            return back()->with('message', 'Orden Eliminada Permanentemente');
+        }else{
+            if($order->status == 6){
+                $order->forceDelete();
+                return back()->with('message', 'Orden Eliminada Permanentemente');
+            }else{
+                $order->status = 4;
+                $order->save();
+                $order->delete();
+                return back()->with('message', 'Orden Cancelada');
+            }
+        }
     }
 }

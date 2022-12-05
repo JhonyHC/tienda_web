@@ -69,6 +69,8 @@ Route::group(['middleware' => 'auth'], function(){
     ], function(){
         Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
         Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class);
+        Route::patch('recuperar/orders/{order}', [\App\Http\Controllers\Admin\OrderController::class,'recuperarOrden'])->withTrashed();
+        Route::delete('eliminar/orders/{order}', [\App\Http\Controllers\Admin\OrderController::class,'eliminarPermanente'])->withTrashed();
         Route::get('dashboard', function () {
             return view('admin.dashboard');
         })->name('dashboard');
@@ -85,6 +87,10 @@ Route::group(['middleware' => 'auth'], function(){
 
         Route::resource('products', \App\Http\Controllers\User\ProductController::class);
         Route::resource('orders', \App\Http\Controllers\User\OrderController::class);
+        /* Route::get('/contacto/{codigo?}', [PaginaController::class, 'actualizacionesContacto']); */
+        Route::patch('recuperar/orders/{order}', [\App\Http\Controllers\User\OrderController::class,'recuperarOrden'])->withTrashed();
+        Route::patch('archivar/orders/{order}', [\App\Http\Controllers\User\OrderController::class,'archivarOrden'])->withTrashed();
+        Route::delete('eliminar/orders/{order}', [\App\Http\Controllers\User\OrderController::class,'eliminarPermanente'])->withTrashed();
         Route::get('dashboard', function () {
             return view('user.dashboard');
         })->name('dashboard');

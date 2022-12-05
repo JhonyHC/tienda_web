@@ -18,6 +18,8 @@
     },
     "dependencies": {
         "@webcomponents/shadydom": "^1.10.0",
-        "sweetalert2": "^11.6.15"
+        "flowbite": "^1.5.4",
+        "sweetalert2": "^11.6.15",
+        "toastify-js": "^1.12.0"
     }
 }

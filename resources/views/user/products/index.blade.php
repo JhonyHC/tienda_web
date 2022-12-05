@@ -48,7 +48,7 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center justify-between py-4">
-                                        <x-jet-button id="{{ $product->id }}" class="btnCarrito">Agregar al carrito</x-jet-button> 
+                                        <x-jet-button id="{{ $product->id }}" class="btnCarrito" name="{{$product->name}}">Agregar al carrito</x-jet-button> 
                                         {{-- <h2 tabindex="0" class="focus:outline-none text-indigo-700 text-xs font-semibold">Bay Area, San Francisco</h2>
                                         <h3 tabindex="0" class="focus:outline-none text-indigo-700 text-xl font-semibold"></h3> --}}
                                     </div>

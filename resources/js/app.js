@@ -1,6 +1,9 @@
 import './bootstrap';
 
+import 'flowbite'
 import Swal from 'sweetalert2'
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 Alpine.start();
@@ -51,7 +54,17 @@ app.aux.deleteCart = ()=>{
         if (result.isConfirmed) {
             localStorage.removeItem('cart')
             app.cartPage.loadCartProducts()
-            
+            Toastify({
+                text: `Carrito eliminado`,
+                duration: 3000,
+                close: true,
+                gravity: "top", // `top` or `bottom`
+                position: "right", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                  background: "linear-gradient(to right, #4FF6F1, #06A5A1)",
+                },
+              }).showToast();   
         }
       })
 }
@@ -93,9 +106,23 @@ app.aux.postRequest = async (url,data)=>{
 //PRODUCTS
 app.productsPage.btnListeners = () => {
     let btns = document.getElementsByClassName('btnCarrito')
+    const urlFull = location.protocol + '//' + location.host;
     for(let btn of btns){
         btn.addEventListener('click',()=>{
             app.productsPage.addToCart(btn.id)
+            Toastify({
+                text: `Producto agregado al carrito: ${btn.name}`,
+                duration: 3000,
+                destination: `${urlFull}/user/cart`,
+                newWindow: false,
+                close: true,
+                gravity: "top", // `top` or `bottom`
+                position: "right", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                  background: "linear-gradient(to right, #4FF6F1, #06A5A1)",
+                },
+              }).showToast();
         })
     }
 }
@@ -211,6 +238,17 @@ app.cartPage.listenClicks = ()=>{
                     target.parentNode.parentNode.remove()
                     app.aux.deleteProduct(target.id)
                     app.cartPage.updateCartTotal()
+                    Toastify({
+                        text: `Producto eliminado`,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top", // `top` or `bottom`
+                        position: "right", // `left`, `center` or `right`
+                        stopOnFocus: true, // Prevents dismissing of toast on hover
+                        style: {
+                          background: "linear-gradient(to right, #4FF6F1, #06A5A1)",
+                        },
+                      }).showToast();
                   /* Swal.fire(
                     'Deleted!',
                     'Your file has been deleted.',
