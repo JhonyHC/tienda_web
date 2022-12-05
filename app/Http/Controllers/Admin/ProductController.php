@@ -105,7 +105,7 @@ class ProductController extends Controller
         if($request->hasFile('image')){
             $formularioValidado['image'] = $request->file('image')->store('images', 'public');
             if($product->image != NULL){
-                Storage::delete($product->image);
+                Storage::delete('/public/'.$product->image);
             }
         }
 
